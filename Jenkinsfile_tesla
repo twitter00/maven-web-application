@@ -1,7 +1,7 @@
 node{
   def mavenHome = tool name: 'maven3.8.6'
   stage('1cloneCode'){
-    git "https://github.com/LandmakTechnology/maven-web-application"
+    git "https://github.com/twitter00/maven-web-application"
   }
   stage('2Test&Build'){
     sh "${mavenHome}/bin/mvn clean package"
@@ -19,7 +19,7 @@ node{
   } 
   stage('5deploy2UAT'){
     sh "echo 'deploy to UAT'  "
-    deploy adapters: [tomcat8(credentialsId: 'tomcat-credentials', path: '', url: 'http://35.170.249.131:8080/')], contextPath: null, war: 'target/*war'
+    deploy adapters: [tomcat9(credentialsId: 'tomat-credentials1', path: '', url: 'http://3.23.64.235:8080/')], contextPath: null, war: 'target/*war'
   }
   stage('6approvalGate'){
     sh "echo 'ready for review' "
@@ -29,13 +29,11 @@ node{
   }
   stage('7deploy2Prod'){
     sh "sleep  50"
-    deploy adapters: [tomcat8(credentialsId: 'tomcat-credentials', path: '', url: 'http://35.170.249.131:8080/')], contextPath: null, war: 'target/*war'
+   deploy adapters: [tomcat9(credentialsId: 'tomat-credentials1', path: '', url: 'http://3.23.64.235:8080/')], contextPath: null, war: 'target/*war'
   }
   stage('8emailNotification'){
-    emailext body: '''Hi All,
-
-Check Build status.
-
-Landmark Technologies''', recipientProviders: [buildUser(), developers(), upstreamDevelopers(), brokenBuildSuspects(), brokenTestsSuspects(), contributor()], subject: 'build status', to: 'tesla-app@gmail.com'
+  emailext body: '''HI All
+check build status
+Millionaire Team''', recipientProviders: [buildUser(), developers(), requestor(), brokenBuildSuspects(), upstreamDevelopers(), contributor()], subject: 'Build status', to: 'Team-Jenkins-Prof'
   }
 }
